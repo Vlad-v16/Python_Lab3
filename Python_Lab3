@@ -1,0 +1,44 @@
+import random
+
+def generate_secret_code(length=4):
+    digits = list("0123456789")
+    random.shuffle(digits)
+    return ''.join(digits[:length])
+
+def analyze_guess(secret, guess):
+    bulls = 0
+    cows = 0
+    for i in range(len(guess)):
+        if guess[i] == secret[i]:
+            bulls += 1
+        elif guess[i] in secret:
+            cows += 1
+    return bulls, cows
+
+def is_valid_guess(guess, length=4):
+    return guess.isdigit() and len(guess) == length
+
+def play_game():
+    print("Гра 'Таємний код'")
+    print("Комп'ютер загадав 4-значне число з унікальних цифр.")
+    print("Спробуйте його вгадати!")
+
+    secret_code = generate_secret_code()
+    attempts = 0
+
+    while True:
+        guess = input("Введіть вашу здогадку (4 цифри): ").strip()
+        if not is_valid_guess(guess):
+            print("Неправильний ввід. Введіть рівно 4 цифри.")
+            continue
+
+        attempts += 1
+        bulls, cows = analyze_guess(secret_code, guess)
+
+        if bulls == 4:
+            print(f"Вітаємо! Ви вгадали код {secret_code} за {attempts} спроб(и).")
+            break
+        else:
+            print(f"Бики: {bulls}, Корови: {cows}")
+
+play_game()
